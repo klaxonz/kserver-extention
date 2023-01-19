@@ -1,0 +1,16 @@
+{
+    "name": "kserver",
+    "description": "网络收藏夹",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": ["storage", "activeTab", "scripting", "webRequest"],
+    "host_permissions": [
+        "*://*/*"
+    ]
+  }
