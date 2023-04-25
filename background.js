@@ -18,12 +18,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (!response.ok) {
                 return Promise.reject(response)
             }
-            return response.json()
+            return response
         }).then(response => {
             sendResponse({
                 code: "00000",
                 msg: "登录成功",
-                data: response
+                token: response.headers.get('authorization'),
+                data: response.json()
             })
         }).catch(error => {
             if (error.statusCode === 401) {
@@ -42,11 +43,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         })
     }
     else if (action === "save") {
-        const { url } = request
-        fetch('http://localhost:9001/webpage/add', {
+        const { url, token } = request
+        fetch('http://localhost:9001/web-page/create', {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': token
             },
             body: JSON.stringify({
                 url: url
@@ -56,12 +58,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 // 登录失败
                 return Promise.reject(response)
             }
-            return response.json()
+            return response
         }).then(response => {
             sendResponse({
                 code: "00000",
                 msg: "保存成功",
-                data: response
+                data: response.json()
             })
         }).catch(error => {
             if (error.statusCode === 401) {
